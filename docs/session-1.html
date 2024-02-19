@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-02-18 Sun 23:30 -->
+<!-- 2024-02-18 Sun 23:45 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>First Steps in Python</title>
@@ -193,6 +193,7 @@
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { }
 </style>
+<link rel="stylesheet" type="text/css" href="css/main_theme.css" />
 </head>
 <body>
 <div id="content" class="content">
@@ -201,27 +202,27 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgc9d8648">Using Python as a Calculator</a></li>
-<li><a href="#org114668f">Reading the Documentation</a></li>
-<li><a href="#org657d063">Basic Datatypes and Operations</a>
+<li><a href="#orgc9d8648">1. Using Python as a Calculator</a></li>
+<li><a href="#org114668f">2. Reading the Documentation</a></li>
+<li><a href="#org657d063">3. Basic Datatypes and Operations</a>
 <ul>
-<li><a href="#orgb767d3f">Testing for Type</a></li>
-<li><a href="#org4b9874c">Number Types</a>
+<li><a href="#orgb767d3f">3.1. Testing for Type</a></li>
+<li><a href="#org4b9874c">3.2. Number Types</a>
 <ul>
-<li><a href="#org750ae1f">The <code>int</code> Type</a></li>
-<li><a href="#orgf336b48">The <code>float</code> Type</a></li>
-<li><a href="#orgd2b4900">Operations with number types</a></li>
+<li><a href="#org750ae1f">3.2.1. The <code>int</code> Type</a></li>
+<li><a href="#orgf336b48">3.2.2. The <code>float</code> Type</a></li>
+<li><a href="#orgd2b4900">3.2.3. Operations with number types</a></li>
 </ul>
 </li>
-<li><a href="#org9f39249">Strings</a></li>
-<li><a href="#org9e6af36">Booleans</a></li>
+<li><a href="#org9f39249">3.3. Strings</a></li>
+<li><a href="#org9e6af36">3.4. Booleans</a></li>
 </ul>
 </li>
-<li><a href="#org31fb200">Variables</a></li>
-<li><a href="#org46349be">Collection Datatypes</a>
+<li><a href="#org31fb200">4. Variables</a></li>
+<li><a href="#org46349be">5. Collection Datatypes</a>
 <ul>
-<li><a href="#org185aca6">Lists</a></li>
-<li><a href="#org5a5f5ff">Dictionaries</a></li>
+<li><a href="#org185aca6">5.1. Lists</a></li>
+<li><a href="#org5a5f5ff">5.2. Dictionaries</a></li>
 </ul>
 </li>
 </ul>
@@ -229,8 +230,8 @@
 </div>
 
 <div id="outline-container-orgc9d8648" class="outline-2">
-<h2 id="orgc9d8648">Using Python as a Calculator</h2>
-<div class="outline-text-2" id="text-orgc9d8648">
+<h2 id="orgc9d8648"><span class="section-number-2">1.</span> Using Python as a Calculator</h2>
+<div class="outline-text-2" id="text-1">
 <p>
 To begin, open PyCharm, create a new project, then in the bottom left
 click the top icon (it should display <i>Python Console</i> when hovered).
@@ -254,8 +255,8 @@ Open the console and try the above examples, as well as any that follow.
 </div>
 
 <div id="outline-container-org114668f" class="outline-2">
-<h2 id="org114668f">Reading the Documentation</h2>
-<div class="outline-text-2" id="text-org114668f">
+<h2 id="org114668f"><span class="section-number-2">2.</span> Reading the Documentation</h2>
+<div class="outline-text-2" id="text-2">
 <p>
 Due to the time constraints placed on this tutorial,
 we will be omitting many things.
@@ -274,8 +275,8 @@ and come back later when you are ready for more.
 
 
 <div id="outline-container-org657d063" class="outline-2">
-<h2 id="org657d063">Basic Datatypes and Operations</h2>
-<div class="outline-text-2" id="text-org657d063">
+<h2 id="org657d063"><span class="section-number-2">3.</span> Basic Datatypes and Operations</h2>
+<div class="outline-text-2" id="text-3">
 <p>
 <i>Datatypes</i> specify what kind of thing the data you are dealing with is.
 Above we saw that we can do arithmetic with numbers, but we also saw
@@ -304,8 +305,8 @@ The basic datatypes we will be dealing with are <code>int</code>, <code>float</c
 </div>
 
 <div id="outline-container-orgb767d3f" class="outline-3">
-<h3 id="orgb767d3f">Testing for Type</h3>
-<div class="outline-text-3" id="text-orgb767d3f">
+<h3 id="orgb767d3f"><span class="section-number-3">3.1.</span> Testing for Type</h3>
+<div class="outline-text-3" id="text-3-1">
 <p>
 You can test for the type of an expression in the console by using python's
 built in <code>type</code> function. For example:
@@ -324,16 +325,16 @@ This tells us that the type of the expression <code>3 + 4</code> is <code>int</c
 </div>
 
 <div id="outline-container-org4b9874c" class="outline-3">
-<h3 id="org4b9874c">Number Types</h3>
-<div class="outline-text-3" id="text-org4b9874c">
+<h3 id="org4b9874c"><span class="section-number-3">3.2.</span> Number Types</h3>
+<div class="outline-text-3" id="text-3-2">
 <p>
 See also the <a href="https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex">python reference on number types</a>.
 </p>
 </div>
 
 <div id="outline-container-org750ae1f" class="outline-4">
-<h4 id="org750ae1f">The <code>int</code> Type</h4>
-<div class="outline-text-4" id="text-org750ae1f">
+<h4 id="org750ae1f"><span class="section-number-4">3.2.1.</span> The <code>int</code> Type</h4>
+<div class="outline-text-4" id="text-3-2-1">
 <p>
 The type <code>int</code> contains integers, i.e. whole numbers without a decimal part.
 These can be any size.<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>
@@ -344,8 +345,8 @@ expect. For example <code>123</code> is the number one-hundred-twenty-three.
 </div>
 
 <div id="outline-container-orgf336b48" class="outline-4">
-<h4 id="orgf336b48">The <code>float</code> Type</h4>
-<div class="outline-text-4" id="text-orgf336b48">
+<h4 id="orgf336b48"><span class="section-number-4">3.2.2.</span> The <code>float</code> Type</h4>
+<div class="outline-text-4" id="text-3-2-2">
 <p>
 <code>float</code> is the datatype of of <i>floating point numbers</i>. These are numbers
 with a decimal point and are optimized for scientific computation.
@@ -388,8 +389,8 @@ figures, but they are there still. For example
 </div>
 
 <div id="outline-container-orgd2b4900" class="outline-4">
-<h4 id="orgd2b4900">Operations with number types</h4>
-<div class="outline-text-4" id="text-orgd2b4900">
+<h4 id="orgd2b4900"><span class="section-number-4">3.2.3.</span> Operations with number types</h4>
+<div class="outline-text-4" id="text-3-2-3">
 <p>
 The basic operations of addition, subtraction, multiplication
 and division are written as <code>+</code>, <code>-</code>, <code>*</code> and <code>/</code> respectively.
@@ -434,8 +435,8 @@ For example:
 </div>
 
 <div id="outline-container-org9f39249" class="outline-3">
-<h3 id="org9f39249">Strings</h3>
-<div class="outline-text-3" id="text-org9f39249">
+<h3 id="org9f39249"><span class="section-number-3">3.3.</span> Strings</h3>
+<div class="outline-text-3" id="text-3-3">
 <p>
 See also the <a href="https://docs.python.org/3/tutorial/introduction.html#text">python tutorial on text</a>.
 The type <code>str</code> is datatype which stores text.
@@ -465,8 +466,8 @@ Such operations are called <i>methods</i>. We will discuss them in detail later.
 </div>
 
 <div id="outline-container-org9e6af36" class="outline-3">
-<h3 id="org9e6af36">Booleans</h3>
-<div class="outline-text-3" id="text-org9e6af36">
+<h3 id="org9e6af36"><span class="section-number-3">3.4.</span> Booleans</h3>
+<div class="outline-text-3" id="text-3-4">
 <p>
 The final basic datatype we are going to discuss is the type of <i>booleans</i>,
 abbreviated <code>bool</code>.
@@ -517,8 +518,8 @@ False
 </div>
 
 <div id="outline-container-org31fb200" class="outline-2">
-<h2 id="org31fb200">Variables</h2>
-<div class="outline-text-2" id="text-org31fb200">
+<h2 id="org31fb200"><span class="section-number-2">4.</span> Variables</h2>
+<div class="outline-text-2" id="text-4">
 <p>
 So far we've only been able to deal with values we directly typed in.
 This changes now! A variable stores<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup> 
@@ -604,12 +605,12 @@ We can use variables anywhere we could use their values. For example
 </div>
 
 <div id="outline-container-org46349be" class="outline-2">
-<h2 id="org46349be">Collection Datatypes</h2>
-<div class="outline-text-2" id="text-org46349be">
+<h2 id="org46349be"><span class="section-number-2">5.</span> Collection Datatypes</h2>
+<div class="outline-text-2" id="text-5">
 </div>
 <div id="outline-container-org185aca6" class="outline-3">
-<h3 id="org185aca6">Lists</h3>
-<div class="outline-text-3" id="text-org185aca6">
+<h3 id="org185aca6"><span class="section-number-3">5.1.</span> Lists</h3>
+<div class="outline-text-3" id="text-5-1">
 <p>
 See also the <a href="https://docs.python.org/3/tutorial/introduction.html#lists">tutorial</a> and <a href="https://docs.python.org/3/library/stdtypes.html#lists">library reference</a> on lists.
 A list is a collection of elements, arranged in an order.
@@ -740,8 +741,8 @@ points to.
 
 
 <div id="outline-container-org5a5f5ff" class="outline-3">
-<h3 id="org5a5f5ff">Dictionaries</h3>
-<div class="outline-text-3" id="text-org5a5f5ff">
+<h3 id="org5a5f5ff"><span class="section-number-3">5.2.</span> Dictionaries</h3>
+<div class="outline-text-3" id="text-5-2">
 <p>
 See the <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">tutorial</a> and <a href="https://docs.python.org/3/library/stdtypes.html#mapping-types-dict">reference</a> on dictionaries.
 A dictionary is a collection of <b>distinct</b> keys which assigns to each
@@ -797,10 +798,5 @@ is more going on under the hood.</p></div></div>
 
 </div>
 </div></div>
-<div id="postamble" class="status">
-<p class="author">Author: Peter Hanukaev</p>
-<p class="date">Created: 2024-02-18 Sun 23:30</p>
-<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
-</div>
 </body>
 </html>

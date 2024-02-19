@@ -1,8 +1,11 @@
 #+title: Python Seminar Series
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/main_theme.css" />
+#+options:org-html-postamble:nil
 
 
-This is the website of my python tutorial series.
+This is the website of the python tutorial series organized at Augusta
+University by the Biomedical Graduate Student Association in the spring
+term of 2024.
 To begin, see how to [[./install.org][get a working python installation]].
 
 -----

@@ -1,5 +1,4 @@
 #+title: Installing Python
-#+xoptions: html-style:nil
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/main_theme.css" />
 
 This note is a step-by-step guide to getting a working set up
