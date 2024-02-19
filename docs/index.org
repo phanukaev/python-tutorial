@@ -1,0 +1,14 @@
+#+title: Python Seminar Series
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/main_theme.css" />
+
+
+This is the website of my python tutorial series.
+To begin, see how to [[./install.org][get a working python installation]].
+
+-----
+
+*under construction*
+
+
+
+foobar
