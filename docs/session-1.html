@@ -1,0 +1,806 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2024-02-17 Sat 22:51 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>First Steps in Python</title>
+<meta name="author" content="Peter Hanukaev" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">First Steps in Python</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org503c727">1. Using Python as a Calculator</a></li>
+<li><a href="#orga1bdf03">2. Reading the Documentation</a></li>
+<li><a href="#orgce97fed">3. Basic Datatypes and Operations</a>
+<ul>
+<li><a href="#org5d1afaa">3.1. Testing for Type</a></li>
+<li><a href="#orgcdc59fc">3.2. Number Types</a>
+<ul>
+<li><a href="#orgbcfbd43">3.2.1. The <code>int</code> Type</a></li>
+<li><a href="#org1d7af25">3.2.2. The <code>float</code> Type</a></li>
+<li><a href="#org46ea4df">3.2.3. Operations with number types</a></li>
+</ul>
+</li>
+<li><a href="#orge6ab711">3.3. Strings</a></li>
+<li><a href="#org424780a">3.4. Booleans</a></li>
+</ul>
+</li>
+<li><a href="#orgfd31919">4. Variables</a></li>
+<li><a href="#orgea5fc0c">5. Collection Datatypes</a>
+<ul>
+<li><a href="#org2e68a5a">5.1. Lists</a></li>
+<li><a href="#org26ff573">5.2. Dictionaries</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org503c727" class="outline-2">
+<h2 id="org503c727"><span class="section-number-2">1.</span> Using Python as a Calculator</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+To begin, open PyCharm, create a new project, then in the bottom left
+click the top icon (it should display <i>Python Console</i> when hovered).
+Here, you can type python expressions and evaluate them immediately by
+hitting enter. This is helpful for quickly trying out new things.
+We can use this to being doing simple computation tasks:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; 3 + 4 * 2
+11
+&gt;&gt;&gt; 'hello' + 'world'
+'helloworld'
+</pre>
+</div>
+
+<p>
+Open the console and try the above examples, as well as any that follow.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga1bdf03" class="outline-2">
+<h2 id="orga1bdf03"><span class="section-number-2">2.</span> Reading the Documentation</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Due to the time constraints placed on this tutorial,
+we will be omitting many things.
+Generally, links to relevant parts will be included as further reading.
+To begin with, there is the
+<a href="https://docs.python.org/3/">entire documentation</a>
+and within it, the <a href="https://docs.python.org/3/tutorial/index.html">python tutorial</a>.
+The latter tries to find a balance between being simple and being comprehensive.
+Perusing the first 6 or so chapters is advisable.
+Don't worry if you don't understand all of it.
+Take that which is easy to you and answers the questions you have,
+and come back later when you are ready for more.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orgce97fed" class="outline-2">
+<h2 id="orgce97fed"><span class="section-number-2">3.</span> Basic Datatypes and Operations</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+<i>Datatypes</i> specify what kind of thing the data you are dealing with is.
+Above we saw that we can do arithmetic with numbers, but we also saw
+that we can add words, which just concatenates them.
+Would it be reasonable to add a number and a word? We can try:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; 3 + 'hi'
+Traceback (most recent call last):
+  File "/home/peter/programs/pycharm-community-2023.3.3/plugins/python-ce/helpers/pydev/pydevconsole.py", line 364, in runcode
+    coro = func()
+           ^^^^^^
+  File "&lt;input&gt;", line 1, in &lt;module&gt;
+TypeError: unsupported operand type(s) for +: 'int' and 'str'
+</pre>
+</div>
+<p>
+Look at the last line: We have a <code>Type Error</code>.
+This line tells us that the types of <code>3</code> and <code>'hi'</code> are not compatible
+when used in this way.
+</p>
+
+<p>
+The basic datatypes we will be dealing with are <code>int</code>, <code>float</code>, <code>str</code> and <code>bool</code>.
+</p>
+</div>
+
+<div id="outline-container-org5d1afaa" class="outline-3">
+<h3 id="org5d1afaa"><span class="section-number-3">3.1.</span> Testing for Type</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+You can test for the type of an expression in the console by using python's
+built in <code>type</code> function. For example:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; 3 + 4
+7
+&gt;&gt;&gt; type(3 + 4)
+&lt;class 'int'&gt;
+</pre>
+</div>
+<p>
+This tells us that the type of the expression <code>3 + 4</code> is <code>int</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcdc59fc" class="outline-3">
+<h3 id="orgcdc59fc"><span class="section-number-3">3.2.</span> Number Types</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+See also the <a href="https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex">python reference on number types</a>.
+</p>
+</div>
+
+<div id="outline-container-orgbcfbd43" class="outline-4">
+<h4 id="orgbcfbd43"><span class="section-number-4">3.2.1.</span> The <code>int</code> Type</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+The type <code>int</code> contains integers, i.e. whole numbers without a decimal part.
+These can be any size.<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>
+Integers can be entered into python by typing the numbers as one would
+expect. For example <code>123</code> is the number one-hundred-twenty-three.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1d7af25" class="outline-4">
+<h4 id="org1d7af25"><span class="section-number-4">3.2.2.</span> The <code>float</code> Type</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<p>
+<code>float</code> is the datatype of of <i>floating point numbers</i>. These are numbers
+with a decimal point and are optimized for scientific computation.
+Enter them into python by typing numbers as usual, using a period (<code>.</code>)
+as the decimal point. Floats also support scientific notation.
+Examples:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; 3.4
+3.4
+&gt;&gt;&gt; 1.2e2
+120.0
+&gt;&gt;&gt; 2.8e-2
+0.028
+&gt;&gt;&gt; type(5.0)
+&lt;class 'float'&gt;
+&gt;&gt;&gt; type(5)
+&lt;class 'int'&gt;
+</pre>
+</div>
+<p>
+While this distinction won't be relevant most of the time (at least in python)
+it is good to be aware of it.
+</p>
+
+<p>
+Floats are optimized for fast computation and are therefore limited in some ways.
+First, floats are limited in size: The largest float supported by python
+is a number with 308 digits.
+Second, floats inherently have rounding errors in computations.
+These probably won't matter if you have a reasonable number of significant
+figures, but they are there still. For example
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; 1.1 + 2.2
+3.3000000000000003
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org46ea4df" class="outline-4">
+<h4 id="org46ea4df"><span class="section-number-4">3.2.3.</span> Operations with number types</h4>
+<div class="outline-text-4" id="text-3-2-3">
+<p>
+The basic operations of addition, subtraction, multiplication
+and division are written as <code>+</code>, <code>-</code>, <code>*</code> and <code>/</code> respectively.
+For exponentiation, use <code>**</code>.
+All of these operations work on both integers and floats,
+and ints and floats can even be mixed in these operations.
+In this case all numbers are first converted to floats, and then
+the result is computed.
+Like in school math, the order of operations<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>
+is respected.
+Parentheses can be used to change the order of operations.
+Examples:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; 10 - 13 * 2
+-16
+&gt;&gt;&gt; (10 - 13) * 2
+-6
+&gt;&gt;&gt; 5 ** 2.0 - 3
+22.0
+</pre>
+</div>
+<p>
+Two more operators which are common in programming are <code>//</code> and <code>%</code>.
+The result of <code>x // y</code> is <code>x</code> divided by <code>y</code> and rounded down,
+while <code>x % y</code> is the remainder <code>x</code> leaves when divided by <code>y</code>.
+For example:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; 7 // 3
+2
+&gt;&gt;&gt; 25 // (3 + 4)
+3
+&gt;&gt;&gt; 7 % 3
+1
+&gt;&gt;&gt; 7 // 3
+2
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge6ab711" class="outline-3">
+<h3 id="orge6ab711"><span class="section-number-3">3.3.</span> Strings</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+See also the <a href="https://docs.python.org/3/tutorial/introduction.html#text">python tutorial on text</a>.
+The type <code>str</code> is datatype which stores text.
+To create a string literal, type some text enclosed in either single or double quotes.
+For example:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; 'hello, world!'
+'hello, world!'
+</pre>
+</div>
+
+<p>
+String support many operations for manipulating the text inside.
+For example, to change all characters in a string to uppercase:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; 'hello, world!'.upper()
+'HELLO, WORLD!'
+</pre>
+</div>
+<p>
+All available operations can be found in <a href="https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str">the library reference on strings</a>.
+Such operations are called <i>methods</i>. We will discuss them in detail later.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org424780a" class="outline-3">
+<h3 id="org424780a"><span class="section-number-3">3.4.</span> Booleans</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+The final basic datatype we are going to discuss is the type of <i>booleans</i>,
+abbreviated <code>bool</code>.
+This type has only two elements: <code>True</code> and <code>False</code>.
+Booleans commonly arise from comparing other objects in our programs.
+For example:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; 1 + 2 == 3
+True
+&gt;&gt;&gt; 3.14 &lt; 2.718
+False
+</pre>
+</div>
+<p>
+Basic comparison operators are as follows
+</p>
+<ul class="org-ul">
+<li><code>x &lt; y</code>, <code>x &gt; y</code> &#x2014; <code>x</code> is less/greater than <code>y</code>.</li>
+<li><code>x &lt;= y</code>, <code>x &gt;= y</code> &#x2014; <code>x</code> is less/greater than or equal to <code>y</code>.</li>
+<li><code>x == y</code> &#x2014; <code>x</code> is equal to <code>y</code> (note that that's <b>two equal signs!</b>)</li>
+</ul>
+<p>
+We will introduce more of these later.
+Furthermore, booleans admit the operations <code>and</code>, <code>or</code> and <code>not</code>:
+</p>
+<ul class="org-ul">
+<li><code>x and y</code> is true if <b>both</b> <code>x</code> and <code>y</code> are true.</li>
+<li><code>x or y</code> is true if <b>at least one</b> of <code>x</code> and <code>y</code> is true.</li>
+<li><code>not x</code> is true if <code>x</code> is false, and is false if <code>x</code> is true.</li>
+</ul>
+<p>
+For example
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; (1 + 2 == 3) and (1 &gt; 0)
+True
+&gt;&gt;&gt; (1 + 2 == 3) or (1 &gt; 0)
+True
+&gt;&gt;&gt; (1 + 2 == 2) or (0 &gt; 1)
+False
+&gt;&gt;&gt; (1 + 2 == 3) and (0 &gt; 1)
+False
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfd31919" class="outline-2">
+<h2 id="orgfd31919"><span class="section-number-2">4.</span> Variables</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+So far we've only been able to deal with values we directly typed in.
+This changes now! A variable stores<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup> 
+a value. It can be used in any place where the value could be used.
+Variables are created as follows:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; an_int = 4
+&gt;&gt;&gt; favorite_color = 'green'
+&gt;&gt;&gt; golden_ratio = 1.618
+</pre>
+</div>
+<p>
+First, we pick a name for our variable. Here we created three variables
+with names <code>an_int</code>, <code>favorite_color</code> and <code>golden_ratio</code>.
+This is followed by one equals sign <code>=</code> and then the value we want to assign
+to the variable.
+</p>
+
+<p>
+Naming variables is a difficult task, and should not be underestimated.
+When in doubt, opt for a longer, more descriptive name. Your IDE will help
+you type the name, so it will not be much more effort to type.
+On the other hand if you name all your variables <code>x</code>, <code>y</code>, <code>z</code>,&#x2026; you will
+quickly become confused and make many mistakes.
+The naming convention<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>
+for python is to name variables in all lowercase
+with underscores (<code>_</code>) separating words in long names.
+</p>
+
+<p>
+The equals sign <code>=</code> is also called the assignment operator.
+It functions very differently from how it does in ordinary math.
+First, it is distinct from <code>==</code> which checks whether two values are equal.
+Second, it works from <i>right to left</i>:
+When we write <code>a = xyz</code> here is what python does:
+</p>
+<ol class="org-ol">
+<li>First, it completely computes the value of <code>xyz</code>.
+Note that <code>xyz</code> can be any expression.</li>
+<li>Then, it stores the computed value inside of the variable <code>a</code>.</li>
+</ol>
+
+<p>
+Here is an example of this.
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; my_number = 4
+&gt;&gt;&gt; my_number = my_number + my_number
+&gt;&gt;&gt; my_number = my_number + 1
+&gt;&gt;&gt; my_number
+9
+</pre>
+</div>
+<p>
+Here is what happens line by line:
+</p>
+<ol class="org-ol">
+<li>In the first line, we set <code>my_number</code> to 4.</li>
+<li>In the second line, python first computes <code>my_number + my_number</code>.
+Since at this point <code>my_number</code> is 4, the result is 8.
+This result is now assigned to <code>my_number</code>, making its value 8.</li>
+<li>In the third line, python first computes <code>my_number + 1</code> which is 9.
+This is then stored in <code>my_number</code> again.</li>
+<li>In the fourth line we ask python to give us the value of <code>my_number</code>
+and we get 9.</li>
+</ol>
+
+<p>
+We can use variables anywhere we could use their values. For example
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; x = 3.4
+&gt;&gt;&gt; 3 * x**2 + 5*x - 7
+44.67999999999999
+&gt;&gt;&gt; my_name = 'Peter'
+&gt;&gt;&gt; greeting = 'Hello'
+&gt;&gt;&gt; greeting + ', ' + my_name + '!'
+'Hello, Peter!'
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgea5fc0c" class="outline-2">
+<h2 id="orgea5fc0c"><span class="section-number-2">5.</span> Collection Datatypes</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-org2e68a5a" class="outline-3">
+<h3 id="org2e68a5a"><span class="section-number-3">5.1.</span> Lists</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+See also the <a href="https://docs.python.org/3/tutorial/introduction.html#lists">tutorial</a> and <a href="https://docs.python.org/3/library/stdtypes.html#lists">library reference</a> on lists.
+A list is a collection of elements, arranged in an order.
+These elements can be anything, and they don't have to all be of the same datatype.
+Lists are declared with square brackets as follows:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; some_values = [5, 3.14, 'words', -7]
+&gt;&gt;&gt; odd_numbers = [1, 3, 5, 7, 9]
+</pre>
+</div>
+<p>
+Lists can be concatenated with the <code>+</code> operator like strings
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; some_values + odd_numbers
+[5, 3.14, 'words', -7, 1, 3, 5, 7, 9]
+</pre>
+</div>
+<p>
+Access specific elements in the list by giving their position in the list
+(starting at 0).
+This can also be used to change entries in the list:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; some_values[0]
+5
+&gt;&gt;&gt; some_values[1]
+3.14
+&gt;&gt;&gt; some_values[2]
+'words'
+&gt;&gt;&gt; some_values[2] = 9.48
+&gt;&gt;&gt; some_value
+[5, 3.14, 9.48, -7]
+</pre>
+</div>
+<p>
+Use negative numbers to count from the end of the list:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; some_values[-1]
+-7
+&gt;&gt;&gt; some_values[-2]
+9.48
+</pre>
+</div>
+<p>
+To add or remove elements at the end of a list, use the <code>append</code> and <code>pop</code> methods:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; some_values.append(4)
+&gt;&gt;&gt; some_values.append(-1.2)
+&gt;&gt;&gt; some_values
+[5, 3.14, 9.48, -7, 4, -1.2]
+&gt;&gt;&gt; last = some_values.pop()
+&gt;&gt;&gt; some_values
+[5, 3.14, 9.48, -7, 4]
+&gt;&gt;&gt; last
+-1.2
+</pre>
+</div>
+<p>
+Notice that the <code>pop</code> method removes the last element,
+but also returns it as a result as part of the computation.
+</p>
+
+<p>
+We can sort a list by calling the <code>sort</code> method.
+We can create a sorted copy of the list by using the <code>sorted</code> function:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; sorted(some_values)
+[-7, 3.14, 4, 5, 9.48]
+&gt;&gt;&gt; some_values
+[5, 3.14, 9.48, -7, 4]
+&gt;&gt;&gt; some_values.sort()
+&gt;&gt;&gt; some_values
+[5, 3.14, 9.48, -7, 4]
+</pre>
+</div>
+<p>
+For more info on sorting, see the <a href="https://docs.python.org/3/howto/sorting.html">sorting HOWTO</a>.
+</p>
+
+<p>
+<b>Warning&#x2014;List Assignment:</b>
+The following code is surprising:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; a_list = [1, 2, 3]
+&gt;&gt;&gt; another_list = a_list
+&gt;&gt;&gt; another_list[1] = 4
+&gt;&gt;&gt; another_list
+[1, 4, 3]
+&gt;&gt;&gt; a_list
+[1, 4, 3]
+</pre>
+</div>
+<p>
+It seems like the variable <code>a_list</code> should remain unchanged, and yet it has changed.
+This is an inteded feature of python.
+When we write <code>a_list = [1, 2, 3]</code> python creates the list <code>[1, 2, 3]</code> and
+stores it somewhere in the computer's memory.
+Then it saves <i>the location</i> of that list into the variable <code>a_list</code>.
+When we write <code>another_list = a_list</code>, python only copies the information
+about the location of the list, but creates no actual second list.
+At this point both <code>a_list</code> and <code>another_list</code> reference the same location.
+When we change <code>another_list</code>, python changes the list at the location
+referenced. Since <code>a_list</code> points to the same location, the changes show
+up there also.
+To check whether two list variables reference the same location or not,
+use the <code>is</code> operator. Continuing from above:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; a_list is another_list
+True
+&gt;&gt;&gt; a_list is [1, 4, 3]
+False
+</pre>
+</div>
+<p>
+The latter comparison is <code>False</code>, because writing <code>[1, 4, 3]</code> forces
+python to create a new list object, instead of reusing the one <code>a_list</code>
+points to.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org26ff573" class="outline-3">
+<h3 id="org26ff573"><span class="section-number-3">5.2.</span> Dictionaries</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+See the <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">tutorial</a> and <a href="https://docs.python.org/3/library/stdtypes.html#mapping-types-dict">reference</a> on dictionaries.
+A dictionary is a collection of <b>distinct</b> keys which assigns to each
+key a value.
+Here is a dictionary describing a person's age, height and and favorite color.
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; a_person = { 'age': 26, 'height': '5-ft-10', 'favorite-color': 'green'}
+</pre>
+</div>
+<p>
+Access values in a dictionary by using the corresponding key
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; a_person['age']
+26
+&gt;&gt;&gt; a_person['favorite-color'] = 'red'
+&gt;&gt;&gt; a_person
+</pre>
+</div>
+<p>
+Keys can be added and removed on the fly as follows:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">&gt;&gt;&gt; a_person['name'] = 'Peter'
+&gt;&gt;&gt; del a_person['favorite-color']
+&gt;&gt;&gt; a_person
+{'age': 26, 'height': '5-ft-10', 'name': 'Peter'}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">While this may seem unsurprising to you,
+it could have passed as a minor miracle as recently as a decade ago</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">If you went to school in the USA, you probably know this as PEMDAS
+or something similar.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">How variables work exactly is complicated in python.
+This is a source of confusion and programming mistakes both among
+beginners and advanced users. We will mention and explain unexpected
+behavior as we encounter it. For now it suffices to be aware that there
+is more going on under the hood.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">See the
+<a href="https://peps.python.org/pep-0008/">PEP8</a>. A document outlining convetions in python.</p></div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: Peter Hanukaev</p>
+<p class="date">Created: 2024-02-17 Sat 22:51</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,388 @@
+#+title: First Steps in Python
+
+* Using Python as a Calculator
+To begin, open PyCharm, create a new project, then in the bottom left
+click the top icon (it should display /Python Console/ when hovered).
+Here, you can type python expressions and evaluate them immediately by
+hitting enter. This is helpful for quickly trying out new things.
+We can use this to being doing simple computation tasks:
+
+#+begin_src python
+  >>> 3 + 4 * 2
+  11
+  >>> 'hello' + 'world'
+  'helloworld'
+#+end_src
+
+Open the console and try the above examples, as well as any that follow.
+
+* Reading the Documentation
+Due to the time constraints placed on this tutorial,
+we will be omitting many things.
+Generally, links to relevant parts will be included as further reading.
+To begin with, there is the
+[[https://docs.python.org/3/][entire documentation]]
+and within it, the [[https://docs.python.org/3/tutorial/index.html][python tutorial]].
+The latter tries to find a balance between being simple and being comprehensive.
+Perusing the first 6 or so chapters is advisable.
+Don't worry if you don't understand all of it.
+Take that which is easy to you and answers the questions you have,
+and come back later when you are ready for more.
+
+
+* Basic Datatypes and Operations
+/Datatypes/ specify what kind of thing the data you are dealing with is.
+Above we saw that we can do arithmetic with numbers, but we also saw
+that we can add words, which just concatenates them.
+Would it be reasonable to add a number and a word? We can try:
+#+begin_src python
+>>> 3 + 'hi'
+Traceback (most recent call last):
+  File "/home/peter/programs/pycharm-community-2023.3.3/plugins/python-ce/helpers/pydev/pydevconsole.py", line 364, in runcode
+    coro = func()
+           ^^^^^^
+  File "<input>", line 1, in <module>
+TypeError: unsupported operand type(s) for +: 'int' and 'str'
+#+end_src
+Look at the last line: We have a ~Type Error~.
+This line tells us that the types of ~3~ and ~'hi'~ are not compatible
+when used in this way.
+
+The basic datatypes we will be dealing with are ~int~, ~float~, ~str~ and ~bool~.
+
+** Testing for Type
+You can test for the type of an expression in the console by using python's
+built in ~type~ function. For example:
+#+begin_src python
+  >>> 3 + 4
+  7
+  >>> type(3 + 4)
+  <class 'int'>
+#+end_src
+This tells us that the type of the expression ~3 + 4~ is ~int~.
+
+** Number Types
+See also the [[https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex][python reference on number types]].
+
+*** The ~int~ Type
+
+The type ~int~ contains integers, i.e. whole numbers without a decimal part.
+These can be any size.[fn:INTSIZE:
+While this may seem unsurprising to you,
+it could have passed as a minor miracle as recently as a decade ago
+]
+Integers can be entered into python by typing the numbers as one would
+expect. For example ~123~ is the number one-hundred-twenty-three.
+
+*** The ~float~ Type
+~float~ is the datatype of of /floating point numbers/. These are numbers
+with a decimal point and are optimized for scientific computation.
+Enter them into python by typing numbers as usual, using a period (~.~)
+as the decimal point. Floats also support scientific notation.
+Examples:
+#+begin_src python
+  >>> 3.4
+  3.4
+  >>> 1.2e2
+  120.0
+  >>> 2.8e-2
+  0.028
+  >>> type(5.0)
+  <class 'float'>
+  >>> type(5)
+  <class 'int'>
+#+end_src
+While this distinction won't be relevant most of the time (at least in python)
+it is good to be aware of it.
+
+Floats are optimized for fast computation and are therefore limited in some ways.
+First, floats are limited in size: The largest float supported by python
+is a number with 308 digits.
+Second, floats inherently have rounding errors in computations.
+These probably won't matter if you have a reasonable number of significant
+figures, but they are there still. For example
+#+begin_src python
+  >>> 1.1 + 2.2
+  3.3000000000000003
+#+end_src
+
+*** Operations with number types
+The basic operations of addition, subtraction, multiplication
+and division are written as ~+~, ~-~, ~*~ and ~/~ respectively.
+For exponentiation, use ~**~.
+All of these operations work on both integers and floats,
+and ints and floats can even be mixed in these operations.
+In this case all numbers are first converted to floats, and then
+the result is computed.
+Like in school math, the order of operations[fn:PEMDAS:
+If you went to school in the USA, you probably know this as PEMDAS
+or something similar.]
+is respected.
+Parentheses can be used to change the order of operations.
+Examples:
+#+begin_src python
+  >>> 10 - 13 * 2
+  -16
+  >>> (10 - 13) * 2
+  -6
+  >>> 5 ** 2.0 - 3
+  22.0
+#+end_src
+Two more operators which are common in programming are ~//~ and ~%~.
+The result of ~x // y~ is ~x~ divided by ~y~ and rounded down,
+while ~x % y~ is the remainder ~x~ leaves when divided by ~y~.
+For example:
+#+begin_src python
+  >>> 7 // 3
+  2
+  >>> 25 // (3 + 4)
+  3
+  >>> 7 % 3
+  1
+  >>> 7 // 3
+  2
+#+end_src
+
+** Strings
+See also the [[https://docs.python.org/3/tutorial/introduction.html#text][python tutorial on text]].
+The type ~str~ is datatype which stores text.
+To create a string literal, type some text enclosed in either single or double quotes.
+For example:
+#+begin_src python
+  >>> 'hello, world!'
+  'hello, world!'
+#+end_src
+
+String support many operations for manipulating the text inside.
+For example, to change all characters in a string to uppercase:
+#+begin_src python
+  >>> 'hello, world!'.upper()
+  'HELLO, WORLD!'
+#+end_src
+All available operations can be found in [[https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str][the library reference on strings]].
+Such operations are called /methods/. We will discuss them in detail later.
+
+** Booleans
+The final basic datatype we are going to discuss is the type of /booleans/,
+abbreviated ~bool~.
+This type has only two elements: ~True~ and ~False~.
+Booleans commonly arise from comparing other objects in our programs.
+For example:
+#+begin_src python
+  >>> 1 + 2 == 3
+  True
+  >>> 3.14 < 2.718
+  False
+#+end_src
+Basic comparison operators are as follows
+- ~x < y~, ~x > y~ --- ~x~ is less/greater than ~y~.
+- ~x <= y~, ~x >= y~ --- ~x~ is less/greater than or equal to ~y~.
+- ~x == y~ --- ~x~ is equal to ~y~ (note that that's *two equal signs!*)
+We will introduce more of these later.
+Furthermore, booleans admit the operations ~and~, ~or~ and ~not~:
+- ~x and y~ is true if *both* ~x~ and ~y~ are true.
+- ~x or y~ is true if *at least one* of ~x~ and ~y~ is true.
+- ~not x~ is true if ~x~ is false, and is false if ~x~ is true.
+For example
+#+begin_src python
+  >>> (1 + 2 == 3) and (1 > 0)
+  True
+  >>> (1 + 2 == 3) or (1 > 0)
+  True
+  >>> (1 + 2 == 2) or (0 > 1)
+  False
+  >>> (1 + 2 == 3) and (0 > 1)
+  False
+#+end_src
+
+* Variables
+
+So far we've only been able to deal with values we directly typed in.
+This changes now! A variable stores[fn:VARSEMANTICS:
+How variables work exactly is complicated in python.
+This is a source of confusion and programming mistakes both among
+beginners and advanced users. We will mention and explain unexpected
+behavior as we encounter it. For now it suffices to be aware that there
+is more going on under the hood.] 
+a value. It can be used in any place where the value could be used.
+Variables are created as follows:
+#+begin_src python
+  >>> an_int = 4
+  >>> favorite_color = 'green'
+  >>> golden_ratio = 1.618
+#+end_src
+First, we pick a name for our variable. Here we created three variables
+with names ~an_int~, ~favorite_color~ and ~golden_ratio~.
+This is followed by one equals sign ~=~ and then the value we want to assign
+to the variable.
+
+Naming variables is a difficult task, and should not be underestimated.
+When in doubt, opt for a longer, more descriptive name. Your IDE will help
+you type the name, so it will not be much more effort to type.
+On the other hand if you name all your variables ~x~, ~y~, ~z~,... you will
+quickly become confused and make many mistakes.
+The naming convention[fn:PEP8:See the
+[[https://peps.python.org/pep-0008/][PEP8]]. A document outlining convetions in python.]
+for python is to name variables in all lowercase
+with underscores (~_~) separating words in long names.
+
+The equals sign ~=~ is also called the assignment operator.
+It functions very differently from how it does in ordinary math.
+First, it is distinct from ~==~ which checks whether two values are equal.
+Second, it works from /right to left/:
+When we write ~a = xyz~ here is what python does:
+1. First, it completely computes the value of ~xyz~.
+   Note that ~xyz~ can be any expression.
+2. Then, it stores the computed value inside of the variable ~a~.
+
+Here is an example of this.
+#+begin_src python
+  >>> my_number = 4
+  >>> my_number = my_number + my_number
+  >>> my_number = my_number + 1
+  >>> my_number
+  9
+#+end_src
+Here is what happens line by line:
+1. In the first line, we set ~my_number~ to 4.
+2. In the second line, python first computes ~my_number + my_number~.
+   Since at this point ~my_number~ is 4, the result is 8.
+   This result is now assigned to ~my_number~, making its value 8.
+3. In the third line, python first computes ~my_number + 1~ which is 9.
+   This is then stored in ~my_number~ again.
+4. In the fourth line we ask python to give us the value of ~my_number~
+   and we get 9.
+
+We can use variables anywhere we could use their values. For example
+#+begin_src python
+  >>> x = 3.4
+  >>> 3 * x**2 + 5*x - 7
+  44.67999999999999
+  >>> my_name = 'Peter'
+  >>> greeting = 'Hello'
+  >>> greeting + ', ' + my_name + '!'
+  'Hello, Peter!'
+#+end_src
+
+* Collection Datatypes
+
+** Lists
+See also the [[https://docs.python.org/3/tutorial/introduction.html#lists][tutorial]] and [[https://docs.python.org/3/library/stdtypes.html#lists][library reference]] on lists.
+A list is a collection of elements, arranged in an order.
+These elements can be anything, and they don't have to all be of the same datatype.
+Lists are declared with square brackets as follows:
+#+begin_src python
+  >>> some_values = [5, 3.14, 'words', -7]
+  >>> odd_numbers = [1, 3, 5, 7, 9]
+#+end_src
+Lists can be concatenated with the ~+~ operator like strings
+#+begin_src python
+  >>> some_values + odd_numbers
+  [5, 3.14, 'words', -7, 1, 3, 5, 7, 9]
+#+end_src
+Access specific elements in the list by giving their position in the list
+(starting at 0).
+This can also be used to change entries in the list:
+#+begin_src python
+  >>> some_values[0]
+  5
+  >>> some_values[1]
+  3.14
+  >>> some_values[2]
+  'words'
+  >>> some_values[2] = 9.48
+  >>> some_value
+  [5, 3.14, 9.48, -7]
+#+end_src
+Use negative numbers to count from the end of the list:
+#+begin_src python
+  >>> some_values[-1]
+  -7
+  >>> some_values[-2]
+  9.48
+#+end_src
+To add or remove elements at the end of a list, use the ~append~ and ~pop~ methods:
+#+begin_src python
+  >>> some_values.append(4)
+  >>> some_values.append(-1.2)
+  >>> some_values
+  [5, 3.14, 9.48, -7, 4, -1.2]
+  >>> last = some_values.pop()
+  >>> some_values
+  [5, 3.14, 9.48, -7, 4]
+  >>> last
+  -1.2
+#+end_src
+Notice that the ~pop~ method removes the last element,
+but also returns it as a result as part of the computation.
+
+We can sort a list by calling the ~sort~ method.
+We can create a sorted copy of the list by using the ~sorted~ function:
+#+begin_src python
+  >>> sorted(some_values)
+  [-7, 3.14, 4, 5, 9.48]
+  >>> some_values
+  [5, 3.14, 9.48, -7, 4]
+  >>> some_values.sort()
+  >>> some_values
+  [5, 3.14, 9.48, -7, 4]
+#+end_src
+For more info on sorting, see the [[https://docs.python.org/3/howto/sorting.html][sorting HOWTO]].
+
+*Warning---List Assignment:*
+The following code is surprising:
+#+begin_src python
+  >>> a_list = [1, 2, 3]
+  >>> another_list = a_list
+  >>> another_list[1] = 4
+  >>> another_list
+  [1, 4, 3]
+  >>> a_list
+  [1, 4, 3]
+#+end_src
+It seems like the variable ~a_list~ should remain unchanged, and yet it has changed.
+This is an inteded feature of python.
+When we write ~a_list = [1, 2, 3]~ python creates the list ~[1, 2, 3]~ and
+stores it somewhere in the computer's memory.
+Then it saves /the location/ of that list into the variable ~a_list~.
+When we write ~another_list = a_list~, python only copies the information
+about the location of the list, but creates no actual second list.
+At this point both ~a_list~ and ~another_list~ reference the same location.
+When we change ~another_list~, python changes the list at the location
+referenced. Since ~a_list~ points to the same location, the changes show
+up there also.
+To check whether two list variables reference the same location or not,
+use the ~is~ operator. Continuing from above:
+#+begin_src python
+  >>> a_list is another_list
+  True
+  >>> a_list is [1, 4, 3]
+  False
+#+end_src
+The latter comparison is ~False~, because writing ~[1, 4, 3]~ forces
+python to create a new list object, instead of reusing the one ~a_list~
+points to.
+
+
+** Dictionaries
+See the [[https://docs.python.org/3/tutorial/datastructures.html#dictionaries][tutorial]] and [[https://docs.python.org/3/library/stdtypes.html#mapping-types-dict][reference]] on dictionaries.
+A dictionary is a collection of *distinct* keys which assigns to each
+key a value.
+Here is a dictionary describing a person's age, height and and favorite color.
+#+begin_src python
+  >>> a_person = { 'age': 26, 'height': '5-ft-10', 'favorite-color': 'green'}
+#+end_src
+Access values in a dictionary by using the corresponding key
+#+begin_src python
+  >>> a_person['age']
+  26
+  >>> a_person['favorite-color'] = 'red'
+  >>> a_person
+#+end_src
+Keys can be added and removed on the fly as follows:
+#+begin_src python
+  >>> a_person['name'] = 'Peter'
+  >>> del a_person['favorite-color']
+  >>> a_person
+  {'age': 26, 'height': '5-ft-10', 'name': 'Peter'}
+#+end_src

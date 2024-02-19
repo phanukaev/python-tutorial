@@ -1,0 +1,124 @@
+#+title: Installing Python
+#+xoptions: html-style:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/main_theme.css" />
+
+This note is a step-by-step guide to getting a working set up
+to start working with the Python programming language.
+We will be using [[https://anaconda.com][Anaconda]] and [[https://www.jetbrains.com/pycharm/][PyCharm]].
+Anaconda contains both the base python as well as the packages we will need
+in this series. We are using it primarily because it is easy to set up.
+PyCharm is an [[https://en.wikipedia.org/wiki/Integrated_development_environment][IDE]] for python.
+
+
+* Windows
+
+** Installing Anaconda
+Head to [[https://anaconda.com/download][the anaconda download page]] and download the installer.
+Run the downloaded program, there is no need to alter any of the settings.
+
+** Installing PyCharm
+
+Head to the [[https://www.jetbrains.com/pycharm/download/][PyCharm download page]] and scroll down to
+/PyCharm Community Edition/.
+Download and run the installer.
+
+[[file:screengrabs/windows/pycharm_download_win.png]]
+
+Click through the installer. In the /Installation Options/ screen,
+check the two options shown below.
+You may also choose the other options, but ensure that at least
+the boxes shown below are checked:
+
+[[file:screengrabs/windows/pycharm_install_opts.png]]
+
+
+* MacOS
+
+** Installing Anaconda
+
+Head to [[https://anaconda.com/download#downloads][the anaconda download page]] and download the graphical installer.
+Select the M1 version if your Macbook is newer than fall 2020 and
+the non-M1 version otherwise.
+Once the file is downloaded,
+double click it and follow the instructions.
+
+
+** Installing PyCharm
+
+Head to the [[https://www.jetbrains.com/pycharm/download/][download page]] and scroll down until you see this:
+
+#+attr_html: :width 700
+file:screengrabs/image.png
+
+If your Macbook is before fall of 2020, select intel, if it's newer, select apple silicon.
+Once the download is finished, you can click on it here in your launcher
+
+#+attr_html: :width 700
+file:screengrabs/launcher.png
+
+Drag the file as in the video:
+
+#+begin_export html
+<video controls width="700">
+<source src="screengrabs/Screen_Recording_2024-02-17_at_11.08.47_AM.mov" />
+#+end_export
+
+* Other Operating Systems
+
+If you use a different operating system, you are on your own.
+
+* Checking that Everything Works
+
+Open PyCharm and select /new project/.
+In the interpreter type section, select /base conda/.
+The field /path to conda/ should be filled automatically,
+and there is no need to modify it:
+
+#+attr_html: :width 700
+file:screengrabs/pycharm_conda.png
+
+Click /create/.
+Right click in the left side of the window and create a new python file
+
+#+attr_html: :width 700
+file:screengrabs/new_file.png
+
+Copy the below code into the new file and click the play button in the top
+right.
+#+begin_src python
+  import numpy as np
+  import matplotlib.pyplot as plt
+  import csv
+
+  l = csv.field_size_limit()
+  print(l)
+
+  data = {'a': np.arange(50),
+          'c': np.random.randint(0, 50, 50),
+          'd': np.random.randn(50)}
+  data['b'] = data['a'] + 10 * np.random.randn(50)
+  data['d'] = np.abs(data['d']) * 100
+
+  plt.scatter('a', 'b', c='c', s='d', data=data)
+  plt.xlabel('entry a')
+  plt.ylabel('entry b')
+  plt.show()
+
+  an_array = np.array(range(11))
+  total = np.sum(an_array)
+
+  if total == 55:
+      print('IT SEEMS THE INSTALLATION HAS BEEN SUCCESSFUL!')
+      exit(0)
+
+  print('SOMETHING HAS PROBABLY GONE WRONG!')
+#+end_src
+
+A window with a plot should pop up. Once you close it the last two
+lines in the bottom panel should read
+#+begin_src text
+IT SEEMS THE INSTALLATION HAS BEEN SUCCESSFUL!
+
+Process finished with exit code 0
+#+end_src
+In this case everything is probably set up correctly.
