@@ -6,7 +6,7 @@
 Due to time constraints, I believe it to be more instructive to take
 a "learning by osmosis" approach to programming, and work a practical
 example during the seminar.
-The fist session will introduce the most basic concepts in python as well as
+The first session will introduce the most basic concepts in python as well as
 the ~csv~ package, which is used to deal with csv files.
 
 * Getting Help
