@@ -1,6 +1,7 @@
 #+title: Python Seminar Series
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/main_theme.css" />
-#+options:org-html-postamble:nil
+#+options: toc:nil
+#+options: num:nil
 
 
 This is the website of the python tutorial series organized at Augusta
@@ -10,4 +11,7 @@ To begin, see how to [[./install.org][get a working python installation]].
 
 -----
 
-*under construction*
+* Session Materials
+
+- [[./session-1.org][Session 1]]
+- *under construction*
