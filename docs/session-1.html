@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-02-21 Wed 15:18 -->
+<!-- 2024-02-26 Mon 14:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Session 1&#x2014;Pokémon Types</title>
+<title>Session 1 &#x2013; Pokémon Types</title>
 <meta name="author" content="Peter Hanukaev" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -197,7 +197,7 @@
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Session 1&#x2014;Pokémon Types</h1>
+<h1 class="title">Session 1 &#x2013; Pokémon Types</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
@@ -205,6 +205,14 @@
 <li><a href="#org743ac35">1. Introduction</a></li>
 <li><a href="#orgc9e67eb">2. Getting Help</a></li>
 <li><a href="#org9ea99d7">3. The Problem Statement</a></li>
+<li><a href="#org42d3cb0">4. The Code</a>
+<ul>
+<li><a href="#org448f433">4.1. Dictionaries</a></li>
+<li><a href="#org446401b">4.2. The Assignment Operator</a></li>
+<li><a href="#org820610f">4.3. Functions</a></li>
+</ul>
+</li>
+<li><a href="#orgb57882e">5. Entire Code</a></li>
 </ul>
 </div>
 </div>
@@ -255,19 +263,426 @@ neutral (deals normal damage),
 super effective (deals double damage),
 not very effective (deals half damage),
 or have no effect at all.
-To determine how effective an attack is against a defender,
-multiply the above modifiers for each of the defender's types.
-</p>
-
-<p>
-Doing this by hand is too tedious as there are too many types in this version.
-Therefore, we will write a program to do it for us.
-Fortunately all information we need is available in a <a href="https://docs.google.com/spreadsheets/d/1WxYmHs_ZsgzLUrL8WfEGN-JHdToubXHvi942ViDIG8k/">spreadsheet</a> online.
+The information we need is available in a <a href="https://docs.google.com/spreadsheets/d/1WxYmHs_ZsgzLUrL8WfEGN-JHdToubXHvi942ViDIG8k/">spreadsheet</a> online.
+As you can see, it is too large to memorize in practive, so we will
+be writing a program to calculate damage for us.
 I have exported the relevant parts to csv files and cleaned them up slightly.
 You can download <a href="resources/pokedex.csv">pokedex.csv</a> and <a href="resources/typechart.csv">typechart.csv</a> if you wish to follow along.
 </p>
+
+<p>
+To determine how effective an attack is, compare the attacking move's type
+against all the defender's types, and multiply the modifiers.
+For example: Suppose the attacker uses a <i>fighting</i> type move against a Pokemon
+with types <i>normal</i>, <i>flying</i> and <i>rock</i>.
+The table shows that fighting type moves deal double damage against normal
+type, half damage against flying type, and double damage against rock type.
+So the result in this case is <code>2 * 0.5 * 2 = 2</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org42d3cb0" class="outline-2">
+<h2 id="org42d3cb0"><span class="section-number-2">4.</span> The Code</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+We will now write some code line by line and explain what is going on in the process.
+I encourage you to type the code yourself.
+Even if you just look at the code below, copying it by typing it yourself
+is much more beneficial than using your computer's copy function.
+It is also worth noting that coding is exact. Pay special attention to the
+following:
+Punctuation such as colons (<code>:</code>), commas (<code>,</code>), periods (<code>.</code>), brackets (<code>[]()</code>) etc.
+and upper case vs lower case letters.
+</p>
+
+<p>
+First, since our data is given as two <code>csv</code> files, we will load the <code>csv</code> package.
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5317ac;">import</span> csv
+</pre>
+</div>
+<p>
+Next, we will load the data from the csv files into the program.
+If you are following along, right click on the project files in Pycharm,
+select <i>open in</i> and then <i>explorer</i>.<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>
+</p>
+
+<p>
+For this we will use a data structure called the <i>dictionary</i>.
+</p>
+</div>
+<div id="outline-container-org448f433" class="outline-3">
+<h3 id="org448f433"><span class="section-number-3">4.1.</span> Dictionaries</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+A dictionary<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> stores a collection of <i>keys</i> and corresponding <i>values</i>.
+Each key can occur in a dictionary <i>only once</i>,
+but values corresponding to different keys may be the same.
+The main usage for a dictionary is as follows:
+If you have a key, you can ask the dictionary for the corresponding value.
+We will explain dictionaries in more detail as we use them.
+</p>
+
+<p>
+First, we want to get the information on Pokemon and their types out of
+<a href="resources/pokedex.csv">pokedex.csv</a>.
+We will use a dictionary for this.
+The keys will be the names of the Pokemon,
+and the corresponding value is going to be the list of its types.
+The code for this looks as follows and we will step through it line by line
+below.
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #00538b;">pokedex</span> = {}
+<span style="color: #5317ac;">with</span> <span style="color: #8f0075;">open</span>(<span style="color: #2544bb;">'pokedex.csv'</span>, <span style="color: #2544bb;">'r'</span>) <span style="color: #5317ac;">as</span> dex:
+    <span style="color: #00538b;">dex_reader</span> = csv.DictReader(dex)
+    <span style="color: #5317ac;">for</span> row <span style="color: #5317ac;">in</span> dex_reader:
+        <span style="color: #00538b;">pokemon_name</span> = row[<span style="color: #2544bb;">'Pokemon'</span>].lower()
+        <span style="color: #00538b;">types</span> = [row[<span style="color: #2544bb;">'Type I'</span>], row[<span style="color: #2544bb;">'Type II'</span>], row[<span style="color: #2544bb;">'Type III'</span>]]
+        <span style="color: #00538b;">pokedex</span>[pokemon_name] = [t.lower() <span style="color: #5317ac;">for</span> t <span style="color: #5317ac;">in</span> types <span style="color: #5317ac;">if</span> t != <span style="color: #2544bb;">''</span>]
+</pre>
+</div>
+
+<p>
+In the first line, we create an empty dictionary called <code>pokedex</code>.
+The symbol <code>{}</code> is the empty dictionary, and we it to the variable
+named <code>pokedex</code>. We could use any name here, and it is generally a good idea
+to use names that make it easy to remember what variables are for.
+</p>
+
+<p>
+The second line opens the file.
+The <code>open('pokedex.csv', 'r')</code> tells python to open the file
+named <i>pokedex.csv</i>, and that we are going to be <i>reading</i> from it
+(and not writing to it).
+This gives us a <i>file handle</i>, that is an object that allows us to interact
+with the file. In this case we named this object <i>dex</i>
+(this is the <code>as dex</code> part of the line).
+Again, we could have chose any other name.
+Note that all subsequent lines begin with four spaces.
+This is both intentional and necessary. The file will be closed automatically
+once we write a line that does not being with four spaces.
+A line beginning with four spaces is called <i>indented</i> and lines
+may be indented multiple times.
+</p>
+
+<p>
+In the third line we create a so called <i>dictReader</i>, to read the csv
+file properly.
+The dict reader treats our csv as a collection of rows.
+Each row is a dictionary where the keys are the names of the columns,
+and the value is the text contained in that row and column.
+Where do the names of the columns come from? The dictReader automatically
+uses the first line of our csv file for the names.
+We give this dict reader the name <code>dex_reader</code> for future use.
+</p>
+
+<p>
+Now we want to process each row of our csv one by one.
+This is done with the <code>for x in y:</code> construct.
+If <code>y</code> is a collection of things, this allows us to do something
+for each element <code>x</code> of this collection.
+Here, we are going to do something for each <code>row</code> in the <code>dex_reader</code>.
+Again the name <code>row</code> is chosen by us, and we could have used any other name.
+</p>
+
+<p>
+The next line gets the name of the Pokemon from each row, and stores it in
+the variable <code>pokemon_name</code>.
+Here we see how we can use a dictionary:
+The first column is named "Pokemon", and we can see this in the csv.
+Then we write <code>row['Pokemon']</code>.
+This asks the dictionary <code>row</code>: "What value do you have at the key 'Pokemon'?".
+And we get the text contained in that field as a response.
+We don't want to worry about spelling, so we make the name of the Pokemon
+all lower case, useing the <code>.lower()</code> method.
+To summarize, this asks the row for the text in the column named "Pokemon",
+makes that text all lower case, and stores the result in the variable
+named <code>pokemon_name</code>.
+</p>
+
+<p>
+Next, we get the Pokemon's types, by asking the the row for it's
+values at the keys "Type I", "Type II" and "Type III".
+We store these in a list by enclosing these three thigns in square brackets
+<code>[ ]</code>.
+We save the list of types in a variable named <code>types</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org446401b" class="outline-3">
+<h3 id="org446401b"><span class="section-number-3">4.2.</span> The Assignment Operator</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+When we write <code>x = ...</code> in python, here is what happens:
+First, python computes what is on the right side of the equals sign (<code>=</code>).
+<i>Then</i>, it stores the value in <code>x</code>.
+</p>
+
+<p>
+With this in mind we can decipher the last line.
+First, lets look at the right of the equal sign:
+</p>
+<div class="org-src-container">
+<pre class="src src-python">[t.lower() <span style="color: #5317ac;">for</span> t <span style="color: #5317ac;">in</span> types <span style="color: #5317ac;">if</span> t != <span style="color: #2544bb;">''</span>]
+</pre>
+</div>
+<p>
+This is called a <i>list comprehension</i>.<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>
+Its value, once computed is a list.
+What are the elements of the list?
+For each element of the list <code>types</code>,
+if that element is not the empty string,
+then that element is made to be all lower case,
+and then added to the resulting list.
+Let's dissect this more:
+<code>for t in types</code> tells us we will be looking at each element of the list
+<code>types</code>. Next, <code>if t != ''</code> tells us to only look at an element
+if it is not equal to the empty string. The notation <code>t != ''</code>
+can be read as "t is not equal to empty string".
+Finally, the <code>t.lower()</code> part tells us that we will be adding the lower cased
+version of the string to our resulting list.
+</p>
+
+<p>
+Next let's look at the left side of the equals sign.
+Since <code>pokedex</code> is a dictionary,
+this is telling it, that the value corresponding to the key
+<code>pokemon_name</code> should be the list on the right side of the equals sign.
+</p>
+
+<p>
+The next code block functions similarly:
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #00538b;">typechart</span> = {}
+<span style="color: #5317ac;">with</span> <span style="color: #8f0075;">open</span>(<span style="color: #2544bb;">'typechart.csv'</span>, <span style="color: #2544bb;">'r'</span>) <span style="color: #5317ac;">as</span> t_chart:
+    <span style="color: #00538b;">typechart_reader</span> = csv.DictReader(t_chart)
+    <span style="color: #5317ac;">for</span> row <span style="color: #5317ac;">in</span> typechart_reader:
+        <span style="color: #00538b;">attacking_type</span> = row[<span style="color: #2544bb;">'Attacking Type'</span>].lower()
+        <span style="color: #00538b;">multipliers</span> = {}
+        <span style="color: #5317ac;">for</span> t <span style="color: #5317ac;">in</span> row.keys():
+            <span style="color: #5317ac;">if</span> t != <span style="color: #2544bb;">'Attacking Type'</span>:
+                <span style="color: #00538b;">multipliers</span>[t.lower()] = <span style="color: #8f0075;">float</span>(row[t])
+        <span style="color: #00538b;">typechart</span>[attacking_type] = multipliers
+</pre>
+</div>
+<p>
+The first five lines are analogous to the previous block
+with different names.
+The typechart is a table, and we want to access its elements
+by specifying the name of a row and column.
+For this, we will be storing dictionaries inside of a dictionary named
+<code>typechart</code>.
+The keys of <code>typechart</code> will be the names of the rows,
+and the keys of the dictionaries inside of <code>typechart</code> will be
+the names of the columns.
+Why does this do the thing we want it to?
+When we give <code>typechart</code> some key, it gives us the entire contents
+of some row as a dictionary. Then, when we give the row the name of a column,
+it can give us whatever it contains at that column.
+This way we can reference cells by naming a row and column using only
+dictionaries.
+</p>
+
+<p>
+We create the dictionary <code>multipliers</code> and initially make it the empty
+dictionary. In the last line,
+we store it in the dictionary <code>typechart</code> under the key <code>attacking_type</code>.
+All we have left to do is to understand the three lines in between.
+</p>
+
+<p>
+Recall from above, that the row in a dictReader is a dictionary,
+whose keys are the names of the columns in our csv.
+So, the line <code>for t in row.keys():</code> tells us we are doing something for
+each key in the dictionary <code>row</code>, i.e. for each column.
+</p>
+
+<p>
+The next line is an <i>if statement</i>.
+We check the condition, and the subsequent indeted code is only run
+if the condition holds.
+In this case, the condition we are checking for is that the name
+of the column is not equal to "Attacking Type".
+This is because this is the name of the first column, which contains the
+names of our rows, and not the data we actuall care about. Hence, we want to
+skip this column.
+</p>
+
+<p>
+Finally, the last line saves some value to the dictionary multipliers
+at the key <code>t.lower()</code> (i.e. the lowercased version of the column name).
+What value is it? It is <code>float(row[t])</code>. What does this mean?
+First, <code>row[t]</code> is the text contained in the current row and column.
+Python makes a distionction between the text consisiting of the three
+characters zero "0", period "." and five "5", and the number <code>0.5</code>.
+To tell python that it should read this text as a number,
+we have to enclose this value in <code>float(...)</code>.
+A <code>float</code> is a number that can have a decimal point.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org820610f" class="outline-3">
+<h3 id="org820610f"><span class="section-number-3">4.3.</span> Functions</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+A <i>function</i> is a bundled computation with a name.
+The next two code block define two functions:
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5317ac;">def</span> <span style="color: #721045;">typechart_lookup</span>(attacking, defending):
+    <span style="color: #5317ac;">return</span> typechart[attacking][defending]
+
+<span style="color: #5317ac;">def</span> <span style="color: #721045;">pokedex_lookup</span>(attacking_type, defending_pokemon):
+    <span style="color: #00538b;">result</span> = 1
+    <span style="color: #00538b;">types</span> = pokedex[defending_pokemon]
+    <span style="color: #5317ac;">for</span> t <span style="color: #5317ac;">in</span> types:
+        <span style="color: #00538b;">result</span> = result * typechart_lookup(attacking_type, t)
+    <span style="color: #5317ac;">return</span> result
+</pre>
+</div>
+<p>
+A function is defined by writing <code>def</code>, then the name of the function,
+here <code>typechart_lookup</code> and <code>pokedex_lookup</code>, and finally a list of <i>parameters</i>
+enclosed in parentheses.
+Parameters are additional information we need to give a function in order to
+use it. They are similar to a key for a dictionary, but a function can
+perform complex computations instead of just looking up a value.
+All the code belonging to a function must be indented.
+</p>
+
+<p>
+The first function simply takes the names of an attacking type and
+defending type and looks them up in our typechart.
+The line <code>return typechart[attacking][defending]</code> tells us
+that this function will give us back a value when we run it.
+Specifically we will get whatever comes after the word <code>return</code>.
+A function's execution always ends when we encounter a <code>return</code>,
+so there can be no more code after the line containing <code>return</code>.
+</p>
+
+<p>
+The second function actually solves the problem we stated in the beginning:
+We give it the name of an attacking type and the name of the defending pokemon
+as parameters. And it computes for us how effective our attack is going to be.
+In the first line we set <code>result</code> to <code>1</code>, and in the last line
+we return <code>result</code>.
+Let's look at what happens in between those lines:
+</p>
+
+<p>
+First, we look to the pokedex, to get the defending pokemon's types,
+and store the result (which is a list<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>)
+in a variable called types.
+Then we go through each element of the list <code>types</code>, using the <code>for</code>-loop.
+</p>
+
+<p>
+Finally, let's look at the line
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #00538b;">result</span> = result * typechart_lookup(attacking_type, t)
+</pre>
+</div>
+<p>
+Remember, we first evaluate the right side of the equality,
+and then save the result to the variable on the left.
+So, after this line executes, <code>result</code> is whatever it was before,
+multiplied by the result of <code>typchart_lookup(attacking_type, t)</code>.
+</p>
+
+<p>
+To summarize we look up how the attacking type stack up against each of
+the defeding Pokemon's types, and multiply the result by each of them
+in turn. This is exactly what we described in the problem statement.
+</p>
+
+<p>
+We can now test our program:
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #8f0075;">print</span>(<span style="color: #2544bb;">'fire attack vs chikorita:'</span>, pokedex_lookup(<span style="color: #2544bb;">'fire'</span>, <span style="color: #2544bb;">'chikorita'</span>))
+<span style="color: #8f0075;">print</span>(<span style="color: #2544bb;">'grass attack vs lombre:'</span>, pokedex_lookup(<span style="color: #2544bb;">'grass'</span>, <span style="color: #2544bb;">'lombre'</span>))
+</pre>
+</div>
+<p>
+The <code>print</code> function tells python to show us the results as text.
+Without it, python would just compute the numbers, and then not do
+anything else with them.
+</p>
 </div>
 </div>
 </div>
+
+
+<div id="outline-container-orgb57882e" class="outline-2">
+<h2 id="orgb57882e"><span class="section-number-2">5.</span> Entire Code</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+For convenience, here is the entire code in one place
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5317ac;">import</span> csv
+
+<span style="color: #00538b;">pokedex</span> = {}
+<span style="color: #5317ac;">with</span> <span style="color: #8f0075;">open</span>(<span style="color: #2544bb;">'pokedex.csv'</span>, <span style="color: #2544bb;">'r'</span>) <span style="color: #5317ac;">as</span> dex:
+    <span style="color: #00538b;">dex_reader</span> = csv.DictReader(dex)
+    <span style="color: #5317ac;">for</span> row <span style="color: #5317ac;">in</span> dex_reader:
+        <span style="color: #00538b;">pokemon_name</span> = row[<span style="color: #2544bb;">'Pokemon'</span>].strip().lower()
+        <span style="color: #00538b;">types</span> = [row[<span style="color: #2544bb;">'Type I'</span>], row[<span style="color: #2544bb;">'Type II'</span>], row[<span style="color: #2544bb;">'Type III'</span>]]
+        <span style="color: #00538b;">pokedex</span>[pokemon_name] = [t.lower() <span style="color: #5317ac;">for</span> t <span style="color: #5317ac;">in</span> types <span style="color: #5317ac;">if</span> t != <span style="color: #2544bb;">''</span>]
+
+<span style="color: #00538b;">typechart</span> = {}
+<span style="color: #5317ac;">with</span> <span style="color: #8f0075;">open</span>(<span style="color: #2544bb;">'typechart.csv'</span>, <span style="color: #2544bb;">'r'</span>) <span style="color: #5317ac;">as</span> t_chart:
+    <span style="color: #00538b;">typechart_reader</span> = csv.DictReader(t_chart)
+    <span style="color: #5317ac;">for</span> row <span style="color: #5317ac;">in</span> typechart_reader:
+        <span style="color: #00538b;">attacking_type</span> = row[<span style="color: #2544bb;">'Attacking Type'</span>].lower()
+        <span style="color: #00538b;">multipliers</span> = {}
+        <span style="color: #5317ac;">for</span> t <span style="color: #5317ac;">in</span> row.keys():
+            <span style="color: #5317ac;">if</span> t != <span style="color: #2544bb;">'Attacking Type'</span>:
+                <span style="color: #00538b;">multipliers</span>[t.lower()] = <span style="color: #8f0075;">float</span>(row[t])
+        <span style="color: #00538b;">typechart</span>[attacking_type] = multipliers
+
+<span style="color: #5317ac;">def</span> <span style="color: #721045;">typechart_lookup</span>(attacking_type, defending_type):
+    <span style="color: #5317ac;">return</span> typechart[attacking_type][defending_type]
+
+<span style="color: #5317ac;">def</span> <span style="color: #721045;">pokedex_lookup</span>(attacking_type, defending_pokemon):
+    <span style="color: #00538b;">result</span> = 1
+    <span style="color: #00538b;">types</span> = pokedex[defending_pokemon]
+    <span style="color: #5317ac;">for</span> t <span style="color: #5317ac;">in</span> types:
+        <span style="color: #00538b;">result</span> = result * typechart_lookup(attacking_type, t)
+    <span style="color: #5317ac;">return</span> result
+
+<span style="color: #8f0075;">print</span>(<span style="color: #2544bb;">'fire attack vs chikorita:'</span>, pokedex_lookup(<span style="color: #2544bb;">'fire'</span>, <span style="color: #2544bb;">'chikorita'</span>))
+<span style="color: #8f0075;">print</span>(<span style="color: #2544bb;">'grass attack vs lombre:'</span>, pokedex_lookup(<span style="color: #2544bb;">'grass'</span>, <span style="color: #2544bb;">'lombre'</span>))
+</pre>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">This is for windows users,
+on MacOS select <i>open in</i> and it should be the first
+option, thought I don't know what it is called.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Learn more about <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">dictionaries</a></p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Learn more about <a href="https://docs.python.org/3/tutorial/introduction.html#lists">lists</a> and <a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">list comprehensions</a></p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">We
+know this, because we made the <code>pokedex</code> a dictionary
+which stores for each pokemon its list of types</p></div></div>
+
+
+</div>
+</div></div>
 </body>
 </html>

@@ -1,5 +1,6 @@
-#+title: Session 1---Pokémon Types
+#+title: Session 1 -- Pokémon Types
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/main_theme.css" />
+# (local-set-key (kbd "C-c m") (lambda () (interactive) (evil-write-all nil) (org-publish-current-project)))
 
 * Introduction
 
@@ -35,11 +36,317 @@ neutral (deals normal damage),
 super effective (deals double damage),
 not very effective (deals half damage),
 or have no effect at all.
-To determine how effective an attack is against a defender,
-multiply the above modifiers for each of the defender's types.
-
-Doing this by hand is too tedious as there are too many types in this version.
-Therefore, we will write a program to do it for us.
-Fortunately all information we need is available in a [[https://docs.google.com/spreadsheets/d/1WxYmHs_ZsgzLUrL8WfEGN-JHdToubXHvi942ViDIG8k/][spreadsheet]] online.
+The information we need is available in a [[https://docs.google.com/spreadsheets/d/1WxYmHs_ZsgzLUrL8WfEGN-JHdToubXHvi942ViDIG8k/][spreadsheet]] online.
+As you can see, it is too large to memorize in practive, so we will
+be writing a program to calculate damage for us.
 I have exported the relevant parts to csv files and cleaned them up slightly.
 You can download [[file:resources/pokedex.csv][pokedex.csv]] and [[file:resources/typechart.csv][typechart.csv]] if you wish to follow along.
+
+To determine how effective an attack is, compare the attacking move's type
+against all the defender's types, and multiply the modifiers.
+For example: Suppose the attacker uses a /fighting/ type move against a Pokemon
+with types /normal/, /flying/ and /rock/.
+The table shows that fighting type moves deal double damage against normal
+type, half damage against flying type, and double damage against rock type.
+So the result in this case is ~2 * 0.5 * 2 = 2~.
+
+* The Code
+We will now write some code line by line and explain what is going on in the process.
+I encourage you to type the code yourself.
+Even if you just look at the code below, copying it by typing it yourself
+is much more beneficial than using your computer's copy function.
+It is also worth noting that coding is exact. Pay special attention to the
+following:
+Punctuation such as colons (~:~), commas (~,~), periods (~.~), brackets (~[]()~) etc.
+and upper case vs lower case letters.
+
+First, since our data is given as two ~csv~ files, we will load the ~csv~ package.
+#+begin_src python
+  import csv
+#+end_src
+Next, we will load the data from the csv files into the program.
+If you are following along, right click on the project files in Pycharm,
+select /open in/ and then /explorer/.[fn::This is for windows users,
+on MacOS select /open in/ and it should be the first
+option, thought I don't know what it is called.
+]
+
+For this we will use a data structure called the /dictionary/.
+** Dictionaries
+A dictionary[fn::
+Learn more about [[https://docs.python.org/3/tutorial/datastructures.html#dictionaries][dictionaries]]
+] stores a collection of /keys/ and corresponding /values/.
+Each key can occur in a dictionary /only once/,
+but values corresponding to different keys may be the same.
+The main usage for a dictionary is as follows:
+If you have a key, you can ask the dictionary for the corresponding value.
+We will explain dictionaries in more detail as we use them.
+
+First, we want to get the information on Pokemon and their types out of
+[[file:resources/pokedex.csv][pokedex.csv]].
+We will use a dictionary for this.
+The keys will be the names of the Pokemon,
+and the corresponding value is going to be the list of its types.
+The code for this looks as follows and we will step through it line by line
+below.
+#+begin_src python
+  pokedex = {}
+  with open('pokedex.csv', 'r') as dex:
+      dex_reader = csv.DictReader(dex)
+      for row in dex_reader:
+          pokemon_name = row['Pokemon'].lower()
+          types = [row['Type I'], row['Type II'], row['Type III']]
+          pokedex[pokemon_name] = [t.lower() for t in types if t != '']
+#+end_src
+
+In the first line, we create an empty dictionary called ~pokedex~.
+The symbol ~{}~ is the empty dictionary, and we it to the variable
+named ~pokedex~. We could use any name here, and it is generally a good idea
+to use names that make it easy to remember what variables are for.
+
+The second line opens the file.
+The ~open('pokedex.csv', 'r')~ tells python to open the file
+named /pokedex.csv/, and that we are going to be /reading/ from it
+(and not writing to it).
+This gives us a /file handle/, that is an object that allows us to interact
+with the file. In this case we named this object /dex/
+(this is the ~as dex~ part of the line).
+Again, we could have chose any other name.
+Note that all subsequent lines begin with four spaces.
+This is both intentional and necessary. The file will be closed automatically
+once we write a line that does not being with four spaces.
+A line beginning with four spaces is called /indented/ and lines
+may be indented multiple times.
+
+In the third line we create a so called /dictReader/, to read the csv
+file properly.
+The dict reader treats our csv as a collection of rows.
+Each row is a dictionary where the keys are the names of the columns,
+and the value is the text contained in that row and column.
+Where do the names of the columns come from? The dictReader automatically
+uses the first line of our csv file for the names.
+We give this dict reader the name ~dex_reader~ for future use.
+
+Now we want to process each row of our csv one by one.
+This is done with the ~for x in y:~ construct.
+If ~y~ is a collection of things, this allows us to do something
+for each element ~x~ of this collection.
+Here, we are going to do something for each ~row~ in the ~dex_reader~.
+Again the name ~row~ is chosen by us, and we could have used any other name.
+
+The next line gets the name of the Pokemon from each row, and stores it in
+the variable ~pokemon_name~.
+Here we see how we can use a dictionary:
+The first column is named "Pokemon", and we can see this in the csv.
+Then we write ~row['Pokemon']~.
+This asks the dictionary ~row~: "What value do you have at the key 'Pokemon'?".
+And we get the text contained in that field as a response.
+We don't want to worry about spelling, so we make the name of the Pokemon
+all lower case, useing the ~.lower()~ method.
+To summarize, this asks the row for the text in the column named "Pokemon",
+makes that text all lower case, and stores the result in the variable
+named ~pokemon_name~.
+
+Next, we get the Pokemon's types, by asking the the row for it's
+values at the keys "Type I", "Type II" and "Type III".
+We store these in a list by enclosing these three thigns in square brackets
+~[ ]~.
+We save the list of types in a variable named ~types~.
+
+** The Assignment Operator
+
+When we write ~x = ...~ in python, here is what happens:
+First, python computes what is on the right side of the equals sign (~=~).
+/Then/, it stores the value in ~x~.
+
+With this in mind we can decipher the last line.
+First, lets look at the right of the equal sign:
+#+begin_src python
+ [t.lower() for t in types if t != '']
+#+end_src
+This is called a /list comprehension/.[fn::
+Learn more about [[https://docs.python.org/3/tutorial/introduction.html#lists][lists]] and [[https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions][list comprehensions]]
+]
+Its value, once computed is a list.
+What are the elements of the list?
+For each element of the list ~types~,
+if that element is not the empty string,
+then that element is made to be all lower case,
+and then added to the resulting list.
+Let's dissect this more:
+~for t in types~ tells us we will be looking at each element of the list
+~types~. Next, ~if t != ''~ tells us to only look at an element
+if it is not equal to the empty string. The notation ~t != ''~
+can be read as "t is not equal to empty string".
+Finally, the ~t.lower()~ part tells us that we will be adding the lower cased
+version of the string to our resulting list.
+
+Next let's look at the left side of the equals sign.
+Since ~pokedex~ is a dictionary,
+this is telling it, that the value corresponding to the key
+~pokemon_name~ should be the list on the right side of the equals sign.
+
+The next code block functions similarly:
+#+begin_src python
+  typechart = {}
+  with open('typechart.csv', 'r') as t_chart:
+      typechart_reader = csv.DictReader(t_chart)
+      for row in typechart_reader:
+          attacking_type = row['Attacking Type'].lower()
+          multipliers = {}
+          for t in row.keys():
+              if t != 'Attacking Type':
+                  multipliers[t.lower()] = float(row[t])
+          typechart[attacking_type] = multipliers
+#+end_src
+The first five lines are analogous to the previous block
+with different names.
+The typechart is a table, and we want to access its elements
+by specifying the name of a row and column.
+For this, we will be storing dictionaries inside of a dictionary named
+~typechart~.
+The keys of ~typechart~ will be the names of the rows,
+and the keys of the dictionaries inside of ~typechart~ will be
+the names of the columns.
+Why does this do the thing we want it to?
+When we give ~typechart~ some key, it gives us the entire contents
+of some row as a dictionary. Then, when we give the row the name of a column,
+it can give us whatever it contains at that column.
+This way we can reference cells by naming a row and column using only
+dictionaries.
+
+We create the dictionary ~multipliers~ and initially make it the empty
+dictionary. In the last line,
+we store it in the dictionary ~typechart~ under the key ~attacking_type~.
+All we have left to do is to understand the three lines in between.
+
+Recall from above, that the row in a dictReader is a dictionary,
+whose keys are the names of the columns in our csv.
+So, the line ~for t in row.keys():~ tells us we are doing something for
+each key in the dictionary ~row~, i.e. for each column.
+
+The next line is an /if statement/.
+We check the condition, and the subsequent indeted code is only run
+if the condition holds.
+In this case, the condition we are checking for is that the name
+of the column is not equal to "Attacking Type".
+This is because this is the name of the first column, which contains the
+names of our rows, and not the data we actuall care about. Hence, we want to
+skip this column.
+
+Finally, the last line saves some value to the dictionary multipliers
+at the key ~t.lower()~ (i.e. the lowercased version of the column name).
+What value is it? It is ~float(row[t])~. What does this mean?
+First, ~row[t]~ is the text contained in the current row and column.
+Python makes a distionction between the text consisiting of the three
+characters zero "0", period "." and five "5", and the number ~0.5~.
+To tell python that it should read this text as a number,
+we have to enclose this value in ~float(...)~.
+A ~float~ is a number that can have a decimal point.
+
+** Functions
+
+A /function/ is a bundled computation with a name.
+The next two code block define two functions:
+#+begin_src python
+  def typechart_lookup(attacking, defending):
+      return typechart[attacking][defending]
+
+  def pokedex_lookup(attacking_type, defending_pokemon):
+      result = 1
+      types = pokedex[defending_pokemon]
+      for t in types:
+          result = result * typechart_lookup(attacking_type, t)
+      return result
+#+end_src
+A function is defined by writing ~def~, then the name of the function,
+here ~typechart_lookup~ and ~pokedex_lookup~, and finally a list of /parameters/
+enclosed in parentheses.
+Parameters are additional information we need to give a function in order to
+use it. They are similar to a key for a dictionary, but a function can
+perform complex computations instead of just looking up a value.
+All the code belonging to a function must be indented.
+
+The first function simply takes the names of an attacking type and
+defending type and looks them up in our typechart.
+The line ~return typechart[attacking][defending]~ tells us
+that this function will give us back a value when we run it.
+Specifically we will get whatever comes after the word ~return~.
+A function's execution always ends when we encounter a ~return~,
+so there can be no more code after the line containing ~return~.
+
+The second function actually solves the problem we stated in the beginning:
+We give it the name of an attacking type and the name of the defending pokemon
+as parameters. And it computes for us how effective our attack is going to be.
+In the first line we set ~result~ to ~1~, and in the last line
+we return ~result~.
+Let's look at what happens in between those lines:
+
+First, we look to the pokedex, to get the defending pokemon's types,
+and store the result (which is a list[fn::We
+know this, because we made the ~pokedex~ a dictionary
+which stores for each pokemon its list of types])
+in a variable called types.
+Then we go through each element of the list ~types~, using the ~for~-loop.
+
+Finally, let's look at the line
+#+begin_src python
+  result = result * typechart_lookup(attacking_type, t)
+#+end_src
+Remember, we first evaluate the right side of the equality,
+and then save the result to the variable on the left.
+So, after this line executes, ~result~ is whatever it was before,
+multiplied by the result of ~typchart_lookup(attacking_type, t)~.
+
+To summarize we look up how the attacking type stack up against each of
+the defeding Pokemon's types, and multiply the result by each of them
+in turn. This is exactly what we described in the problem statement.
+
+We can now test our program:
+#+begin_src python
+  print('fire attack vs chikorita:', pokedex_lookup('fire', 'chikorita'))
+  print('grass attack vs lombre:', pokedex_lookup('grass', 'lombre'))
+#+end_src
+The ~print~ function tells python to show us the results as text.
+Without it, python would just compute the numbers, and then not do
+anything else with them.
+
+
+* Entire Code
+For convenience, here is the entire code in one place
+
+#+begin_src python
+  import csv
+
+  pokedex = {}
+  with open('pokedex.csv', 'r') as dex:
+      dex_reader = csv.DictReader(dex)
+      for row in dex_reader:
+          pokemon_name = row['Pokemon'].strip().lower()
+          types = [row['Type I'], row['Type II'], row['Type III']]
+          pokedex[pokemon_name] = [t.lower() for t in types if t != '']
+
+  typechart = {}
+  with open('typechart.csv', 'r') as t_chart:
+      typechart_reader = csv.DictReader(t_chart)
+      for row in typechart_reader:
+          attacking_type = row['Attacking Type'].lower()
+          multipliers = {}
+          for t in row.keys():
+              if t != 'Attacking Type':
+                  multipliers[t.lower()] = float(row[t])
+          typechart[attacking_type] = multipliers
+
+  def typechart_lookup(attacking_type, defending_type):
+      return typechart[attacking_type][defending_type]
+
+  def pokedex_lookup(attacking_type, defending_pokemon):
+      result = 1
+      types = pokedex[defending_pokemon]
+      for t in types:
+          result = result * typechart_lookup(attacking_type, t)
+      return result
+
+  print('fire attack vs chikorita:', pokedex_lookup('fire', 'chikorita'))
+  print('grass attack vs lombre:', pokedex_lookup('grass', 'lombre'))
+#+end_src
