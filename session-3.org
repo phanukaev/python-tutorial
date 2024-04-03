@@ -1,0 +1,11 @@
+#+title: Session 3 --- Number Crunching II: A Worked Example
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/main_theme.css" />
+# (local-set-key (kbd "C-c m") (lambda () (interactive) (evil-write-all nil) (org-publish-current-project)))
+#+options: toc:nil
+#+options: num:1
+
+Data Download:
+[[file:resources/sodium-data.xlsx]]
+
+#+include: "~/PycharmProjects/session-3-test/main.py" src python
+

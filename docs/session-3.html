@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-04-03 Wed 15:49 -->
+<!-- 2024-04-03 Wed 15:56 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Python Seminar Series</title>
+<title>Session 3 &#x2014; Number Crunching II: A Worked Example</title>
 <meta name="author" content="Peter Hanukaev" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -197,25 +197,68 @@
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Python Seminar Series</h1>
+<h1 class="title">Session 3 &#x2014; Number Crunching II: A Worked Example</h1>
 <p>
-This is the website of the python tutorial series organized at Augusta
-University by the Biomedical Graduate Student Association in the spring
-term of 2024.
-To begin, see how to <a href="./install.html">get a working python installation</a>.
+Data Download:
+<a href="resources/sodium-data.xlsx">resources/sodium-data.xlsx</a>
 </p>
 
-<hr />
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #ff7800; font-weight: bold;">import</span> numpy <span style="color: #ff7800; font-weight: bold;">as</span> np
+<span style="color: #ff7800; font-weight: bold;">import</span> matplotlib.pyplot <span style="color: #ff7800; font-weight: bold;">as</span> plt
+<span style="color: #ff7800; font-weight: bold;">import</span> pandas <span style="color: #ff7800; font-weight: bold;">as</span> pd
 
-<div id="outline-container-org7609ce1" class="outline-2">
-<h2 id="org7609ce1">Session Materials</h2>
-<div class="outline-text-2" id="text-org7609ce1">
-<ul class="org-ul">
-<li><a href="./session-1.html">Session 1</a></li>
-<li><a href="./session-2.html">Session 2</a></li>
-<li><b>under construction</b></li>
-</ul>
-</div>
+<span style="color: #671ebb;">data</span> = pd.read_excel(<span style="color: #409b1c;">'./Sodium Data - KAF.xlsx'</span>)
+
+<span style="color: #671ebb;">data</span> = np.array(data)
+<span style="color: #671ebb;">ss_data</span> = np.array(data[2:17, 2:6], dtype=<span style="color: #000000; background-color: #f8f8ff;">float</span>)
+<span style="color: #671ebb;">ncf_data</span> = np.array(data[18:40, 2:6], dtype=<span style="color: #000000; background-color: #f8f8ff;">float</span>)
+<span style="color: #671ebb;">pbs_data</span> = np.array(data[41:49, 2:6], dtype=<span style="color: #000000; background-color: #f8f8ff;">float</span>)
+
+<span style="color: #ff7800; font-weight: bold;">def</span> <span style="color: #000000; background-color: #f8f8ff; font-weight: bold;">nansterr</span>(array, axis = <span style="color: #ff7800; font-weight: bold;">None</span>):
+    <span style="color: #671ebb;">sizes</span> = np.sum(~np.isnan(array), axis=axis)
+    <span style="color: #ff7800; font-weight: bold;">return</span> np.nanstd(array, axis=axis, ddof = 1) / np.sqrt(sizes)
+
+<span style="color: #ff7800; font-weight: bold;">def</span> <span style="color: #000000; background-color: #f8f8ff; font-weight: bold;">compute_stats</span>(array):
+    <span style="color: #671ebb;">means</span> = np.nanmean(array, axis=0)
+    <span style="color: #671ebb;">stdevs</span> = np.nanstd(array, axis=0, ddof=1)
+    <span style="color: #671ebb;">sterrs</span> = nansterr(array, axis=0)
+
+    <span style="color: #ff7800; font-weight: bold;">return</span> {<span style="color: #409b1c;">'mean'</span>: means, <span style="color: #409b1c;">'stdev'</span>: stdevs, <span style="color: #409b1c;">'sterr'</span>: sterrs}
+
+<span style="color: #ff7800; font-weight: bold;">def</span> <span style="color: #000000; background-color: #f8f8ff; font-weight: bold;">make_plot</span>(array):
+    <span style="color: #671ebb;">data</span> = compute_stats(array)
+    <span style="color: #671ebb;">width</span> = 1
+    <span style="color: #671ebb;">labels</span> = [<span style="color: #409b1c;">'BL'</span>, <span style="color: #409b1c;">'HS7'</span>, <span style="color: #409b1c;">'HS14'</span>, <span style="color: #409b1c;">'HS21'</span>]
+    plt.bar(labels, <span style="color: #409b1c;">'mean'</span>, color=<span style="color: #409b1c;">'teal'</span>, yerr=<span style="color: #409b1c;">'sterr'</span>, capsize=6, data=data)
+    plt.show()
+
+<span style="color: #ff7800; font-weight: bold;">def</span> <span style="color: #000000; background-color: #f8f8ff; font-weight: bold;">multiplot</span>():
+    <span style="color: #671ebb;">x_points</span> = np.linspace(1,4,num=4)
+    <span style="color: #671ebb;">width</span> = 0.2
+    <span style="color: #671ebb;">sep</span> = 0.05
+    <span style="color: #671ebb;">capsize</span> = 3
+    <span style="color: #671ebb;">ax</span> = plt.subplot()
+    ax.bar(x_points + 0 * (width+sep), <span style="color: #409b1c;">'mean'</span>, label=<span style="color: #409b1c;">'SS-C'</span>, color=<span style="color: #409b1c;">'xkcd:cornflower blue'</span>,
+            width=width, yerr=<span style="color: #409b1c;">'sterr'</span>, capsize=capsize, data=compute_stats(ss_data),
+            )
+    ax.bar(x_points + 1 * (width+sep), <span style="color: #409b1c;">'mean'</span>, label=<span style="color: #409b1c;">'NCF'</span>, color=<span style="color: #409b1c;">'xkcd:rust'</span>,
+            width=width, yerr=<span style="color: #409b1c;">'sterr'</span>, capsize=capsize, data=compute_stats(ncf_data),
+            )
+    ax.bar(x_points + 2 * (width+sep), <span style="color: #409b1c;">'mean'</span>, label=<span style="color: #409b1c;">'PBS'</span>, color=<span style="color: #409b1c;">'xkcd:dark sea green'</span>,
+            width=width, yerr=<span style="color: #409b1c;">'sterr'</span>, capsize=capsize, data=compute_stats(pbs_data),
+            )
+    ax.set_title(<span style="color: #409b1c;">'Na Excretion (mEq/day)'</span>)
+    ax.set_xticks(x_points + width + sep)
+    ax.set_xticklabels([<span style="color: #409b1c;">'BL'</span>, <span style="color: #409b1c;">'HS7'</span>, <span style="color: #409b1c;">'HS14'</span>, <span style="color: #409b1c;">'HS21'</span>])
+    ax.legend()
+    plt.show()
+
+<span style="color: #000000; background-color: #f8f8ff;">print</span>(compute_stats(ss_data))
+<span style="color: #000000; background-color: #f8f8ff;">print</span>(compute_stats(ncf_data))
+<span style="color: #000000; background-color: #f8f8ff;">print</span>(compute_stats(pbs_data))
+multiplot()
+</pre>
 </div>
 </div>
 </body>

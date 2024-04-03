@@ -14,4 +14,5 @@ To begin, see how to [[./install.org][get a working python installation]].
 * Session Materials
 
 - [[./session-1.org][Session 1]]
+- [[./session-2.org][Session 2]]
 - *under construction*
